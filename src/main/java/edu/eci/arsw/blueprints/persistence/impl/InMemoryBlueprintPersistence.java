@@ -32,16 +32,16 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
         Blueprint bp = new Blueprint("_authorname_", "_bpname_ ", pts);
         blueprints.put(new Tuple<>(bp.getAuthor(), bp.getName()), bp);
 
-        oint[] pts0=new Point[]{new Point(2, 10),new Point(4, 15)};
-        Blueprint bp0=new Blueprint("Sergio Bejarano", "Centro Recrecional Jardines",pts0);
-        blueprints.put(new Tuple<>(bp0.getAuthor(),bp0.getName()), bp0);
+        Point[] pts0 = new Point[] { new Point(2, 10), new Point(4, 15) };
+        Blueprint bp0 = new Blueprint("Sergio Bejarano", "Centro Recrecional Jardines", pts0);
+        blueprints.put(new Tuple<>(bp0.getAuthor(), bp0.getName()), bp0);
 
-        Point[] pts1=new Point[]{new Point(14, 10),new Point(11, 12)};
-        Blueprint bp1=new Blueprint("Laura Rodriguez", "Centro Acuático de Bogotá",pts1);
-        blueprints.put(new Tuple<>(bp1.getAuthor(),bp1.getName()), bp1);
-        Point[] pts2=new Point[]{new Point(14, 10),new Point(11, 25), new Point(13, 80)};
-        Blueprint bp2=new Blueprint("Laura Rodríguez", "Parque Salitre",pts2);
-        blueprints.put(new Tuple<>(bp2.getAuthor(),bp2.getName()), bp2);
+        Point[] pts1 = new Point[] { new Point(14, 10), new Point(11, 12) };
+        Blueprint bp1 = new Blueprint("Laura Rodriguez", "Centro Acuático de Bogotá", pts1);
+        blueprints.put(new Tuple<>(bp1.getAuthor(), bp1.getName()), bp1);
+        Point[] pts2 = new Point[] { new Point(14, 10), new Point(11, 25), new Point(13, 80) };
+        Blueprint bp2 = new Blueprint("Laura Rodríguez", "Parque Salitre", pts2);
+        blueprints.put(new Tuple<>(bp2.getAuthor(), bp2.getName()), bp2);
 
     }
 
