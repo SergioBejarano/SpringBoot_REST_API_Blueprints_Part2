@@ -54,7 +54,7 @@ public class BlueprintAPIController {
             return new ResponseEntity<>(bp, HttpStatus.ACCEPTED);
         } catch (BlueprintNotFoundException ex) {
             Logger.getLogger(BlueprintAPIController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>("Plano no encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("El autor o el plano no existe", HttpStatus.NOT_FOUND);
         }
     }
 }
