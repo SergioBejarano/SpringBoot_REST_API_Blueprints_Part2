@@ -215,7 +215,7 @@ $ curl -i -X POST -HContent-Type:application/json -HAccept:application/json http
 
 Usamos la herramienta sugerida para diseñar el objeto jSON que usaremos:
 
-{jsonherr}
+<img width="660" height="376" alt="image" src="https://github.com/user-attachments/assets/8029e142-a653-4876-a46a-f5179f4691ea" />
 
 Ajustamos los parámetros del comando dado
 
@@ -225,11 +225,12 @@ curl -i -X POST -H "Content-Type:application/json" -H "Accept:application/json" 
 
 Ejecutamos y observamos que lanzó un mensaje 201 indicando que el plano se agregó correctamente
 
-{post1test}
+<img width="921" height="97" alt="image" src="https://github.com/user-attachments/assets/703af125-3012-4b4a-a9a8-522f62cd4ccc" />
 
 Consultamos nuevamente los planos existentes para verficar que se agregaron correctamente
 
-{post2test}
+<img width="921" height="93" alt="image" src="https://github.com/user-attachments/assets/00765c2a-dcf4-42f9-aafa-1ebd61851529" />
+
 
 *3. Teniendo en cuenta el autor y nombre del plano registrado, verifique que el mismo se pueda obtener mediante una petición GET al recurso '/blueprints/{author}/{bpname}' correspondiente.*
 
@@ -237,7 +238,8 @@ Consultamos específicamente el plano creado con:
 ```
 http://localhost:8081/blueprints/juan/Parque%20Simon%20Bolivar
 ```
-{post3test}
+<img width="921" height="156" alt="image" src="https://github.com/user-attachments/assets/03f18dd0-49df-4f85-a8f7-2dcec515d0d9" />
+
 
 *4. Agregue soporte al verbo PUT para los recursos de la forma '/blueprints/{author}/{bpname}', de manera que sea posible actualizar un plano determinado.*
 
@@ -295,12 +297,13 @@ curl -i -X PUT -H "Content-Type:application/json" -H "Accept:application/json" h
 
 Recibimos un mensaje 200 diciendo que fue correctamente actulizado
 
-{put1test}
+<img width="921" height="107" alt="image" src="https://github.com/user-attachments/assets/78f69f71-59e1-4fc8-b339-a1d22026f7ed" />
 
 Consultamos el plano para verificar que se haya actualizado
 
-{put2test}
+<img width="728" height="138" alt="image" src="https://github.com/user-attachments/assets/159e2942-7fe8-44ea-8117-b8776d080e02" />
 
+---
 ### Parte III
 
 El componente BlueprintsRESTAPI funcionará en un entorno concurrente. Es decir, atederá múltiples peticiones simultáneamente (con el stack de aplicaciones usado, dichas peticiones se atenderán por defecto a través múltiples de hilos). Dado lo anterior, debe hacer una revisión de su API (una vez funcione), e identificar:
