@@ -32,10 +32,28 @@ public class BlueprintsServices {
     @Qualifier("redundancyFilter")
     BlueprintFilter filter = null;
 
-    public void addNewBlueprint(Blueprint bp) throws BlueprintPersistenceException {
-        bpp.saveBlueprint(bp);
+    /**
+     * Registers a new blueprint in the system if it does not already exist.
+     *
+     * @param blueprint the blueprint to register
+     * @throws BlueprintPersistenceException if the blueprint already exists or cannot be stored
+     */
+    public void addNewBlueprint(Blueprint blueprint) throws BlueprintPersistenceException {
+        try {
+            Blueprint existing = bpp.getBlueprint(blueprint.getAuthor(), blueprint.getName());
+            if (existing != null) {
+                throw new BlueprintPersistenceException("The blueprint already exists: " + blueprint.getName());
+            }
+        } catch (BlueprintNotFoundException e) {
+            bpp.saveBlueprint(blueprint);
+        }
     }
 
+    /**
+     * Retrieves all stored blueprints and applies the configured filter to each of them.
+     *
+     * @return a set containing all filtered blueprints
+     */
     public Set<Blueprint> getAllBlueprints() {
         Set<Blueprint> blueprints = bpp.getAllBlueprints();
         Set<Blueprint> filtered = new LinkedHashSet<>();
@@ -76,5 +94,22 @@ public class BlueprintsServices {
             filtered.add(filter.filter(bp));
         }
         return filtered;
+    }
+
+    /**
+     * Updates an existing blueprint identified by its author and name
+     * with the new information provided.
+     *
+     * @param author           the blueprint's author
+     * @param name             the blueprint's name
+     * @param updatedBlueprint the new content for the blueprint
+     * @throws BlueprintNotFoundException if there is no blueprint with the given author and name
+     */
+    public void updateBlueprint(String author, String name, Blueprint updatedBlueprint) throws BlueprintNotFoundException {
+        Blueprint existing = bpp.getBlueprint(author, name);
+        if (existing == null) {
+            throw new BlueprintNotFoundException("The blueprint does not exist: " + name);
+        }
+        bpp.updateBlueprint(author, name, updatedBlueprint);
     }
 }

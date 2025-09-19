@@ -40,4 +40,14 @@ public interface BlueprintsPersistence {
      * @return all blueprints in the system
      */
     public Set<Blueprint> getAllBlueprints();
+
+    /**
+     * Updates an existing blueprint identified by author and name.
+     *
+     * @param author           the blueprint's author
+     * @param name             the blueprint's name
+     * @param updatedBlueprint the new data to update the blueprint with
+     * @throws BlueprintNotFoundException if no blueprint exists with the given author and name
+     */
+    public void updateBlueprint(String author, String name, Blueprint updatedBlueprint) throws BlueprintNotFoundException;
 }

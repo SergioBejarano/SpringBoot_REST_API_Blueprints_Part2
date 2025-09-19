@@ -1,9 +1,13 @@
 ### Escuela Colombiana de Ingeniería
-
 ### Arquitecturas de Software
 
+---
+### Integrantes
 
+- Sergio Andrés Bejarano Rodríguez
+- Laura Daniela Rodríguez Sánchez
 
+---
 #### API REST para la gestión de planos.
 
 En este ejercicio se va a construír el componente BlueprintsRESTAPI, el cual permita gestionar los planos arquitectónicos de una prestigiosa compañia de diseño. La idea de este API es ofrecer un medio estandarizado e 'independiente de la plataforma' para que las herramientas que se desarrollen a futuro para la compañía puedan gestionar los planos de forma centralizada.
@@ -22,9 +26,9 @@ Del anterior diagrama de componentes (de alto nivel), se desprendió el siguient
 
 ### Parte I
 
-1. Integre al proyecto base suministrado los Beans desarrollados en el ejercicio anterior. Sólo copie las clases, NO los archivos de configuración. Rectifique que se tenga correctamente configurado el esquema de inyección de dependencias con las anotaciones @Service y @Autowired.
+*1. Integre al proyecto base suministrado los Beans desarrollados en el ejercicio anterior. Sólo copie las clases, NO los archivos de configuración. Rectifique que se tenga correctamente configurado el esquema de inyección de dependencias con las anotaciones @Service y @Autowired.*
 
-2. Modifique el bean de persistecia 'InMemoryBlueprintPersistence' para que por defecto se inicialice con al menos otros tres planos, y con dos asociados a un mismo autor.
+*2. Modifique el bean de persistecia 'InMemoryBlueprintPersistence' para que por defecto se inicialice con al menos otros tres planos, y con dos asociados a un mismo autor.*
 
 ```java
 public InMemoryBlueprintPersistence() {
@@ -48,10 +52,9 @@ public InMemoryBlueprintPersistence() {
 ```
 
 
-3. Configure su aplicación para que ofrezca el recurso "/blueprints", de manera que cuando se le haga una petición GET, retorne -en formato jSON- el conjunto de todos los planos. Para esto:
+*3. Configure su aplicación para que ofrezca el recurso "/blueprints", de manera que cuando se le haga una petición GET, retorne -en formato jSON- el conjunto de todos los planos. Para esto:*
 
-	* Modifique la clase BlueprintAPIController teniendo en cuenta el siguiente ejemplo de controlador REST hecho con SpringMVC/SpringBoot:
-
+* Modifique la clase BlueprintAPIController teniendo en cuenta el siguiente ejemplo de controlador REST hecho con SpringMVC/SpringBoot:*
 	```java
 	@RestController
 	@RequestMapping(value = "/url-raiz-recurso")
@@ -91,7 +94,7 @@ Nota:
 En la implementación actual de `InMemoryBlueprintPersistence`, el método `getAllBlueprints()` simplemente retorna los valores almacenados en memoria, por lo que no existe una causa real para lanzar una excepción de tipo `BlueprintPersistenceException` o `BlueprintNotFoundException`. En los siguientes servicios que se definen si se hace manejo de las excepciones ya que se deben considerar para ciertas condiciones.
 
 
-4. Verifique el funcionamiento de a aplicación lanzando la aplicación con maven:
+*4. Verifique el funcionamiento de a aplicación lanzando la aplicación con maven:*
 
 ```bash
 $ mvn compile	
@@ -114,7 +117,7 @@ Y luego enviando una petición GET a: http://localhost:8080/blueprints. Rectifiq
 
 
 
-5. Modifique el controlador para que ahora, acepte peticiones GET al recurso /blueprints/{author}, el cual retorne usando una representación jSON todos los planos realizados por el autor cuyo nombre sea {author}. Si no existe dicho autor, se debe responder con el código de error HTTP 404. Para esto, revise en [la documentación de Spring](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html), sección 22.3.2, el uso de @PathVariable. De nuevo, verifique que al hacer una petición GET -por ejemplo- a recurso http://localhost:8080/blueprints/juan, se obtenga en formato jSON el conjunto de planos asociados al autor 'juan' (ajuste esto a los nombres de autor usados en el punto 2).
+*5. Modifique el controlador para que ahora, acepte peticiones GET al recurso /blueprints/{author}, el cual retorne usando una representación jSON todos los planos realizados por el autor cuyo nombre sea {author}. Si no existe dicho autor, se debe responder con el código de error HTTP 404. Para esto, revise en [la documentación de Spring](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html), sección 22.3.2, el uso de @PathVariable. De nuevo, verifique que al hacer una petición GET -por ejemplo- a recurso http://localhost:8080/blueprints/juan, se obtenga en formato jSON el conjunto de planos asociados al autor 'juan' (ajuste esto a los nombres de autor usados en el punto 2).*
 
 Se realiza el ajuste cambiando los dos planos con autora `Laura Rodriguez` a `juan`:
 
@@ -134,7 +137,7 @@ Se realiza el ajuste cambiando los dos planos con autora `Laura Rodriguez` a `ju
 
 
 
-6. Modifique el controlador para que ahora, acepte peticiones GET al recurso /blueprints/{author}/{bpname}, el cual retorne usando una representación jSON sólo UN plano, en este caso el realizado por {author} y cuyo nombre sea {bpname}. De nuevo, si no existe dicho autor, se debe responder con el código de error HTTP 404.
+*6. Modifique el controlador para que ahora, acepte peticiones GET al recurso /blueprints/{author}/{bpname}, el cual retorne usando una representación jSON sólo UN plano, en este caso el realizado por {author} y cuyo nombre sea {bpname}. De nuevo, si no existe dicho autor, se debe responder con el código de error HTTP 404.*
 
 ```java
 @RequestMapping(value = "/{author}/{bpname}", method = RequestMethod.GET)
@@ -162,59 +165,178 @@ Prueba realziada si el plano no existe:
 
 <img width="1600" height="766" alt="image" src="https://github.com/user-attachments/assets/f9528d3b-fc13-4b5d-995d-67df28fb50f6" />
 
-
+---
 ### Parte II
 
-1.  Agregue el manejo de peticiones POST (creación de nuevos planos), de manera que un cliente http pueda registrar una nueva orden haciendo una petición POST al recurso ‘planos’, y enviando como contenido de la petición todo el detalle de dicho recurso a través de un documento jSON. Para esto, tenga en cuenta el siguiente ejemplo, que considera -por consistencia con el protocolo HTTP- el manejo de códigos de estados HTTP (en caso de éxito o error):
+*1.  Agregue el manejo de peticiones POST (creación de nuevos planos), de manera que un cliente http pueda registrar una nueva orden haciendo una petición POST al recurso ‘planos’, y enviando como contenido de la petición todo el detalle de dicho recurso a través de un documento jSON. Para esto, tenga en cuenta el siguiente ejemplo, que considera -por consistencia con el protocolo HTTP- el manejo de códigos de estados HTTP (en caso de éxito o error):*
 
-	```	java
-	@RequestMapping(method = RequestMethod.POST)	
-	public ResponseEntity<?> manejadorPostRecursoXX(@RequestBody TipoXX o){
-        try {
-            //registrar dato
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (XXException ex) {
-            Logger.getLogger(XXController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>("Error bla bla bla",HttpStatus.FORBIDDEN);            
-        }        
- 	
-	}
-	```	
+```java
+@RequestMapping(method = RequestMethod.POST)	
+public ResponseEntity<?> manejadorPostRecursoXX(@RequestBody TipoXX o){
+    try {
+        //registrar dato
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    } catch (XXException ex) {
+        Logger.getLogger(XXController.class.getName()).log(Level.SEVERE, null, ex);
+        return new ResponseEntity<>("Error bla bla bla",HttpStatus.FORBIDDEN);            
+    }        
 
+}
+```
 
-2.  Para probar que el recurso ‘planos’ acepta e interpreta
+Realizamos el siguiente método post en el controlador:
+```java
+@RequestMapping(method = RequestMethod.POST)
+public ResponseEntity<?> addBlueprint(@RequestBody Blueprint blueprint) {
+try {
+blueprintsServices.addNewBlueprint(blueprint);
+return new ResponseEntity<>(HttpStatus.CREATED);
+} catch (BlueprintPersistenceException e) {
+return new ResponseEntity<>("El plano ya existe o no se pudo registrar", HttpStatus.FORBIDDEN);
+} catch (Exception e) {
+return new ResponseEntity<>("Error al registrar el plano", HttpStatus.INTERNAL_SERVER_ERROR);
+}
+}
+```
+
+*2.  Para probar que el recurso ‘planos’ acepta e interpreta
     correctamente las peticiones POST, use el comando curl de Unix. Este
     comando tiene como parámetro el tipo de contenido manejado (en este
     caso jSON), y el ‘cuerpo del mensaje’ que irá con la petición, lo
     cual en este caso debe ser un documento jSON equivalente a la clase
-    Cliente (donde en lugar de {ObjetoJSON}, se usará un objeto jSON correspondiente a una nueva orden:
+    Cliente (donde en lugar de {ObjetoJSON}, se usará un objeto jSON correspondiente a una nueva orden:*
 
-	```	
-	$ curl -i -X POST -HContent-Type:application/json -HAccept:application/json http://URL_del_recurso_ordenes -d '{ObjetoJSON}'
-	```	
-
-	Con lo anterior, registre un nuevo plano (para 'diseñar' un objeto jSON, puede usar [esta herramienta](http://www.jsoneditoronline.org/)):
+```
+$ curl -i -X POST -HContent-Type:application/json -HAccept:application/json http://URL_del_recurso_ordenes -d '{ObjetoJSON}'
+```
 	
+*Con lo anterior, registre un nuevo plano (para 'diseñar' un objeto jSON, puede usar [esta herramienta](http://www.jsoneditoronline.org/)):*
+*Nota: puede basarse en el formato jSON mostrado en el navegador al consultar una orden con el método GET.*
 
-	Nota: puede basarse en el formato jSON mostrado en el navegador al consultar una orden con el método GET.
+Usamos la herramienta sugerida para diseñar el objeto jSON que usaremos:
 
+{jsonherr}
 
-3. Teniendo en cuenta el autor y numbre del plano registrado, verifique que el mismo se pueda obtener mediante una petición GET al recurso '/blueprints/{author}/{bpname}' correspondiente.
+Ajustamos los parámetros del comando dado
 
-4. Agregue soporte al verbo PUT para los recursos de la forma '/blueprints/{author}/{bpname}', de manera que sea posible actualizar un plano determinado.
+```
+curl -i -X POST -H "Content-Type:application/json" -H "Accept:application/json" http://localhost:8081/blueprints -d "{\"author\":\"juan\",\"points\":[{\"x\":10,\"y\":50},{\"x\":40,\"y\":80},{\"x\":30,\"y\":20}], \"name\":\"Parque Simon Bolivar\"}"
+```
 
+Ejecutamos y observamos que lanzó un mensaje 201 indicando que el plano se agregó correctamente
+
+{post1test}
+
+Consultamos nuevamente los planos existentes para verficar que se agregaron correctamente
+
+{post2test}
+
+*3. Teniendo en cuenta el autor y nombre del plano registrado, verifique que el mismo se pueda obtener mediante una petición GET al recurso '/blueprints/{author}/{bpname}' correspondiente.*
+
+Consultamos específicamente el plano creado con:
+```
+http://localhost:8081/blueprints/juan/Parque%20Simon%20Bolivar
+```
+{post3test}
+
+*4. Agregue soporte al verbo PUT para los recursos de la forma '/blueprints/{author}/{bpname}', de manera que sea posible actualizar un plano determinado.*
+
+Agregamos el método PUT al controlador:
+
+```java
+    @RequestMapping(value = "/{author}/{bpname}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateBlueprint(@PathVariable("author") String author, @PathVariable("bpname") String bpname, @RequestBody Blueprint blueprint) {
+        try {
+            blueprintsServices.updateBlueprint(author, bpname, blueprint);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (BlueprintNotFoundException e) {
+            return new ResponseEntity<>("El plano no existe", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al actualizar el plano", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+```
+Agregamos el método `updateBlueprint` en `BlueprintsServices`
+
+```java
+    public void updateBlueprint(String author, String name, Blueprint updatedBlueprint) throws BlueprintNotFoundException {
+        Blueprint existing = bpp.getBlueprint(author, name);
+        if (existing == null) {
+            throw new BlueprintNotFoundException("El plano no existe: " + name);
+        }
+        bpp.updateBlueprint(author, name, updatedBlueprint);
+    }
+```
+Agregamos el método en la interfaz `BlueprintsPersistence`
+```java
+ public void updateBlueprint(String author, String name, Blueprint updatedBlueprint) throws BlueprintNotFoundException;
+```
+
+Y por último implementamos `updateBlueprint` en `InMemoryBlueprintPersistence`
+```java
+    @Override
+    public void updateBlueprint(String author, String name, Blueprint updatedBlueprint) throws BlueprintNotFoundException {
+        Tuple<String, String> key = new Tuple<>(author, name);
+
+        if (!blueprints.containsKey(key)) {
+            throw new BlueprintNotFoundException("El plano no existe: " + name);
+        }
+
+        blueprints.put(key, updatedBlueprint);
+        System.out.println("Plano actualizado: " + name + " de " + author);
+    }
+```
+
+Finalmente, probamos para verificar su correcto funcionamiento con
+
+```
+curl -i -X PUT -H "Content-Type:application/json" -H "Accept:application/json" http://localhost:8081/blueprints/juan/Parque%20Simon%20Bolivar -d "{\"author\":\"juan\",\"points\":[{\"x\":60,\"y\":10}], \"name\":\"Parque Simon Bolivar\"}"
+```
+
+Recibimos un mensaje 200 diciendo que fue correctamente actulizado
+
+{put1test}
+
+Consultamos el plano para verificar que se haya actualizado
+
+{put2test}
 
 ### Parte III
 
 El componente BlueprintsRESTAPI funcionará en un entorno concurrente. Es decir, atederá múltiples peticiones simultáneamente (con el stack de aplicaciones usado, dichas peticiones se atenderán por defecto a través múltiples de hilos). Dado lo anterior, debe hacer una revisión de su API (una vez funcione), e identificar:
-
-* Qué condiciones de carrera se podrían presentar?
-* Cuales son las respectivas regiones críticas?
+* ¿Qué condiciones de carrera se podrían presentar?
+* ¿Cuáles son las respectivas regiones críticas?
 
 Ajuste el código para suprimir las condiciones de carrera. Tengan en cuenta que simplemente sincronizar el acceso a las operaciones de persistencia/consulta DEGRADARÁ SIGNIFICATIVAMENTE el desempeño de API, por lo cual se deben buscar estrategias alternativas.
 
-Escriba su análisis y la solución aplicada en el archivo ANALISIS_CONCURRENCIA.txt
+*Escriba su análisis y la solución aplicada en el archivo ANALISIS_CONCURRENCIA.txt*
 
+El análisis se escribió en el archivo ANALISIS_CONCURRENCIA.txt, acá se deja como se realizó la solución
+
+1. Se cambió el HashMap blueprints a un ConcurrentHashMap en la clase `InMemoryBlueprintPersistence`
+```java
+@Service
+public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
+
+    private final Map<Tuple<String, String>, Blueprint> blueprints = new ConcurrentHashMap<>();
+}
+```
+
+2. En la misma clase modificamos el método `saveBlueprint` agregando el uso del `putIfAbsent` en ConcurrentHashMap dentro de la condición para verificar el plano existente.
+
+```java
+    @Override
+    public void saveBlueprint(Blueprint bp) throws BlueprintPersistenceException {
+        if (blueprints.putIfAbsent(new Tuple<>(bp.getAuthor(),bp.getName()), bp) != null){
+            throw new BlueprintPersistenceException("The given blueprint already exists: "+bp);
+        }
+        else{
+            blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
+        }
+    }
+```
+
+---
 #### Criterios de evaluación
 
 1. Diseño.

@@ -12,10 +12,10 @@ import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.BlueprintsPersistence;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -24,7 +24,7 @@ import java.util.Set;
 @Service
 public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
 
-    private final Map<Tuple<String, String>, Blueprint> blueprints = new HashMap<>();
+    private final Map<Tuple<String, String>, Blueprint> blueprints = new ConcurrentHashMap<>();
 
     public InMemoryBlueprintPersistence() {
         // load stub data
@@ -45,25 +45,45 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
 
     }
 
+    /**
+     * Saves a new blueprint in the persistence store.
+     *
+     * @param bp the blueprint to save
+     * @throws BlueprintPersistenceException if a blueprint with the same author and name already exists
+     */
     @Override
     public void saveBlueprint(Blueprint bp) throws BlueprintPersistenceException {
-        if (blueprints.containsKey(new Tuple<>(bp.getAuthor(), bp.getName()))) {
+        if (blueprints.putIfAbsent(new Tuple<>(bp.getAuthor(), bp.getName()), bp) != null) {
             throw new BlueprintPersistenceException("The given blueprint already exists: " + bp);
         } else {
             blueprints.put(new Tuple<>(bp.getAuthor(), bp.getName()), bp);
         }
     }
 
+    /**
+     * Retrieves a blueprint by author and name.
+     *
+     * @param author     the blueprint's author
+     * @param bprintname the blueprint's name
+     * @return the corresponding blueprint
+     * @throws BlueprintNotFoundException if no such blueprint exists
+     */
     @Override
     public Blueprint getBlueprint(String author, String bprintname) throws BlueprintNotFoundException {
         Blueprint blueprint = blueprints.get(new Tuple<>(author, bprintname));
         if (blueprint == null) {
             throw new BlueprintNotFoundException("The blueprint does not exist");
         }
-
         return blueprint;
     }
 
+    /**
+     * Retrieves all blueprints created by a given author.
+     *
+     * @param author the author's name
+     * @return a set of blueprints belonging to the author
+     * @throws BlueprintNotFoundException if no blueprints exist for the given author
+     */
     @Override
     public Set<Blueprint> getBlueprintsByAuthor(String author) throws BlueprintNotFoundException {
         Set<Blueprint> result = new HashSet<>();
@@ -77,12 +97,36 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence {
         if (result.isEmpty()) {
             throw new BlueprintNotFoundException("No blueprints found for the author: " + author);
         }
-
         return result;
     }
 
+    /**
+     * Retrieves all blueprints stored in the persistence.
+     *
+     * @return a set of all blueprints
+     */
     @Override
     public Set<Blueprint> getAllBlueprints() {
         return new HashSet<>(blueprints.values());
+    }
+
+    /**
+     * Updates an existing blueprint with new content.
+     *
+     * @param author           the blueprint's author
+     * @param name             the blueprint's name
+     * @param updatedBlueprint the new blueprint to replace the old one
+     * @throws BlueprintNotFoundException if no blueprint exists with the given author and name
+     */
+    @Override
+    public void updateBlueprint(String author, String name, Blueprint updatedBlueprint) throws BlueprintNotFoundException {
+        Tuple<String, String> key = new Tuple<>(author, name);
+
+        if (!blueprints.containsKey(key)) {
+            throw new BlueprintNotFoundException("The blueprint does not exist: " + name);
+        }
+
+        blueprints.put(key, updatedBlueprint);
+        System.out.println("Blueprint updated: " + name + " by " + author);
     }
 }
